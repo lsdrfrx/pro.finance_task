@@ -1,0 +1,44 @@
+services:
+  postgres:
+    image: postgres
+    restart: on-failure
+    ports:
+      - 5432:5432
+    environment:
+      - POSTGRES_USER=${DATABASE_USER}
+      - POSTGRES_PASSWORD=${DATABASE_PASSWORD}
+      - POSTGRES_DB=${DATABASE_DB}
+    volumes:
+      - postgres:/data
+
+  redis:
+    image: redis
+    restart: on-failure
+    ports:
+      - 6379:6379
+
+    command: redis-server --save 20 1 --loglevel warning --requirepass ${REDIS_PASSWORD}
+    volumes:
+      - redis:/data
+
+  api:
+    build: ./
+    depends_on:
+      - postgres
+      - redis
+    ports:
+      - ${APP_PORT}:${APP_PORT}
+    env_file:
+      - .env
+    environment:
+      - DATABASE_HOST=postgres
+      - REDIS_HOST=redis
+    links:
+      - postgres
+      - redis
+
+volumes:
+  postgres:
+    driver: local
+  redis:
+    driver: local
