@@ -106,6 +106,8 @@ export class AuthService {
 
     // Получение сессии из хранилища и проверка соответсвия полученного токена с действительным
     const session = await this.redisService.getSession(user.uuid);
+    this.logger.log(user.uuid);
+    this.logger.log(session);
     if (!session.refreshToken) {
       throw new ForbiddenException('Access denied');
     }

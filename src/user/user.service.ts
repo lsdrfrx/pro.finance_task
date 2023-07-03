@@ -33,12 +33,4 @@ export class UserService {
 
     return this.userRepository.save(user);
   }
-
-  async modifyUser(): Promise<User> {
-    return null;
-  }
-
-  async deleteUser(): Promise<User> {
-    return null;
-  }
 }

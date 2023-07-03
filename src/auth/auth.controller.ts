@@ -67,8 +67,7 @@ export class AuthController {
   })
   @UseGuards(RefreshTokenGuard)
   @Post('refresh')
-  refreshTokens(@Req() req: Request): Promise<TokenPairDTO | null> {
-    const uuid = req.user['uuid'];
+  refreshTokens(@Req() req: Request, @Body() uuid: string): Promise<TokenPairDTO | null> {
     const refreshToken = req.user['refreshToken'];
 
     return this.authService.refreshTokens(uuid, refreshToken);
